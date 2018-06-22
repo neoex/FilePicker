@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FilePicker</string>
+    <string name="btn_conform">确定</string>
 </resources>

@@ -15,4 +15,23 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="SingleLineTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextDetailStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:textColor">#999999</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

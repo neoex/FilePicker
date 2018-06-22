@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void showSelectFile() {
-        new FilePicker().withActivity(this).start();
+        new FilePicker().withActivity(this).withTitle("选择文件").start();
     }
 
 }

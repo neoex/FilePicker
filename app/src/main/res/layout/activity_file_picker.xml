@@ -9,9 +9,25 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_pick_file"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:layout_height="40dp"
+        android:background="@color/color_blue_sea"
         android:minHeight="?android:attr/actionBarSize"
-        app:navigationIcon="?attr/navigationIcon" />
+        app:navigationIcon="@mipmap/ic_left_arrow" />
 
+    <include layout="@layout/empty_holder_layout" />
+
+    <cn.mugua.com.filepicker.widget.EmptyRecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_select_conform"
+        android:layout_below="@+id/toolbar_pick_file" />
+
+    <Button
+        android:id="@+id/btn_select_conform"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_blue_sea"
+        android:text="@string/btn_conform"
+        android:textColor="@color/color_deepGray" />
 </RelativeLayout>

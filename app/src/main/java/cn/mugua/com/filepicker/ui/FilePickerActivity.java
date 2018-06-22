@@ -20,6 +20,11 @@ public class FilePickerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initActivityTheme();
         setContentView(R.layout.activity_file_picker);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initToolBar();
     }
 
@@ -29,7 +34,7 @@ public class FilePickerActivity extends AppCompatActivity {
             finish();
         }
         mPickerParam = (PickerParam) intent.getExtras().getSerializable(PickerConstant.INTENT_PICKER_KEY);
-        if(mPickerParam.getTheme() != 0 ){
+        if (mPickerParam.getTheme() != 0) {
             setTheme(mPickerParam.getTheme());
         }
     }
@@ -39,9 +44,9 @@ public class FilePickerActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar_pick_file);
         setSupportActionBar(mToolbar);
         //该方法的作用：决定左上角的图标是否可以点击。没有向左的小图标。 true 图标可以点击 false 不可以点击。
-        getSupportActionBar().setHomeButtonEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
         //true 给左上角图标的左边加上一个返回的图标 。对应ActionBar.DISPLAY_HOME_AS_UP
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (mPickerParam.getTitle() != null) {
             mToolbar.setTitle(mPickerParam.getTitle());
         }
@@ -61,6 +66,11 @@ public class FilePickerActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+
+    public void loadFilesFromPath(String rootPath) {
+
     }
 
 }
