@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,6 +24,9 @@ import cn.mugua.com.filepicker.widget.EmptyRecyclerView;
 
 
 public class FilePickerActivity extends AppCompatActivity {
+    private static final int SELECT_MODE_DONE = 0;
+    private static final int SELECT_MODE_DIR = 1;
+
     private Toolbar mToolbar;
     private PickerParam mPickerParam;
     private PickerPresenter mPresenter;
@@ -31,6 +36,9 @@ public class FilePickerActivity extends AppCompatActivity {
     private TextView mUpTextView;
     private String mCurrentPath;
     private String mStartPath;
+    private int mCurrentPosition = -1;
+    private Button mSelectButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +50,19 @@ public class FilePickerActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        mSelectButton = findViewById(R.id.btn_select_conform);
+        mSelectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseDone();
+            }
+        });
         mTextViewPath = findViewById(R.id.tv_path);
         mUpTextView = findViewById(R.id.tv_back);
         mUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(canBackUp()){
+                if (canBackUp()) {
                     String path = getParentPath(mCurrentPath);
                     loadFilesFromPath(path);
                 }
@@ -138,6 +153,12 @@ public class FilePickerActivity extends AppCompatActivity {
                 if (file.isDirectory()) {
                     loadFilesFromPath(file.getAbsolutePath());
                 }
+                //选择文件
+                if (mPickerParam.isChooseFileMode()) {
+                    if (!file.isDirectory()) {
+                        mFileSelectAdapter.setSelect(position);
+                    }
+                }
             }
         });
     }
@@ -170,6 +191,36 @@ public class FilePickerActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+
+    private void chooseDone() {
+        if (mPickerParam.isChooseFileMode()) {
+            if (mFileSelectAdapter.getSelectedList().size() == 0) {
+                Toast.makeText(this, "尚未选择文件！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            boolean outLimit = mPickerParam.getMaxSelectLimite() != 0 &&
+                    mFileSelectAdapter.getSelectedList().size() > mPickerParam.getMaxSelectLimite();
+            if (outLimit) {
+                Toast.makeText(this, "选择文件超过上限！", Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            if(mStartPath.equalsIgnoreCase(mCurrentPath)){
+                Toast.makeText(this, "尚未选择文件！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+
+        Intent backIntent = new Intent();
+        if (mPickerParam.isChooseFileMode()) {
+            backIntent.putStringArrayListExtra("paths", mFileSelectAdapter.getSelectedList());
+        } else {
+            backIntent.putExtra("path", mTextViewPath.getText().toString().trim());
+        }
+        setResult(RESULT_OK, backIntent);
+        finish();
     }
 
 }

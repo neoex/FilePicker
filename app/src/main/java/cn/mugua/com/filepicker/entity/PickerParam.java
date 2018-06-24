@@ -17,7 +17,7 @@ public class PickerParam implements Serializable {
 
     private int mMaxSelectLimite;
 
-    private boolean mChooseFileMode;
+    private boolean mChooseFileMode = true;
     private boolean mIsMuiltyMode;
     private String[] mFileExtensionFilters;
     private boolean isGreater;

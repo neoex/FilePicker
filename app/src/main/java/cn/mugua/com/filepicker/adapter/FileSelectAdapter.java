@@ -45,11 +45,11 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
     @Override
     public void onBindViewHolder(FileSelectViewHolder holder, final int position) {
         //是否是多选
-        if (!mPickerParam.isMuiltyMode()) {
-            holder.cbChoose.setVisibility(View.GONE);
-        } else {
+        if (getCheckBoxVisibility(position)) {
             holder.cbChoose.setVisibility(View.VISIBLE);
             holder.cbChoose.setChecked(isSelected(position));
+        } else {
+            holder.cbChoose.setVisibility(View.GONE);
         }
         bindDatas(holder, position);
         holder.layoutRoot.setOnClickListener(new View.OnClickListener() {
@@ -70,12 +70,41 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
     }
 
     public void setSelect(int position) {
+        if (selectable(position)) {
+            if (mPickerParam.isMuiltyMode()) {
+                setSelectInMultipleMode(position);
+            } else {
+                setSelectInSingleMode(position);
+            }
+            notifyItemChanged(position);
+        }
+    }
+
+    private boolean selectable(int position) {
+        if (mPickerParam.isChooseFileMode()) {
+            return !mFileList.get(position).isDirectory();
+        }
+//        return mFileList.get(position).isDirectory();
+        return false;
+    }
+
+    private void setSelectInMultipleMode(int position) {
         if (isSelected(position)) {
             mSelectedList.remove(mFileList.get(position));
         } else {
             mSelectedList.add(mFileList.get(position));
         }
     }
+
+    private void setSelectInSingleMode(int position) {
+        if (mSelectedList.size() > 0) {
+            int selectedPos = mFileList.indexOf(mSelectedList.get(0));
+            mSelectedList.clear();
+            notifyItemChanged(selectedPos);
+        }
+        mSelectedList.add(mFileList.get(position));
+    }
+
 
     public File getItem(int position) {
         return mFileList.get(position);
@@ -122,12 +151,22 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
         } else {
             bindFileData(viewHolder, file);
         }
+        if (!mPickerParam.isMuiltyMode()) {
+            if (isSelected(position)) {
+                viewHolder.layoutRoot.setSelected(true);
+            } else {
+                viewHolder.layoutRoot.setSelected(false);
+            }
+        }
     }
 
     private void bindDirDatas(FileSelectViewHolder viewHolder, File file) {
         updateFileDirIcon(viewHolder.ivType);
         viewHolder.tvName.setText(file.getName());
         viewHolder.tvDetail.setText(mSimpleDateFormat.format(new Date(file.lastModified())));
+        if (mPickerParam.isChooseFileMode()) {
+
+        }
     }
 
     private void bindFileData(FileSelectViewHolder viewHolder, File file) {
@@ -142,13 +181,26 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
         notifyDataSetChanged();
     }
 
-    public void setSelectPosition(int position) {
+    private boolean getCheckBoxVisibility(int position) {
+        boolean visible = false;
+        if (mPickerParam.isMuiltyMode()) {
+            visible = true;
+        }
+        //选择文件 让文件夹不可选中
+        return visible && selectable(position);
 
     }
 
     public void setSelectedList(List<File> selectedList) {
         mSelectedList = selectedList;
         notifyDataSetChanged();
+    }
+    public ArrayList<String> getSelectedList(){
+        ArrayList<String> paths = new ArrayList<>(mSelectedList.size());
+        for (File file:mSelectedList) {
+            paths.add(file.getAbsolutePath());
+        }
+        return paths;
     }
 
     public void setIconStyle(int style) {
