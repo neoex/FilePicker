@@ -26,12 +26,13 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
     private PickerParam mPickerParam;
     private List<File> mSelectedList;
     private SimpleDateFormat mSimpleDateFormat;
+    private OnItemClickListener mOnItemClickListener;
 
     public FileSelectAdapter(List<File> fileList, PickerParam pickerParam) {
         mFileList = fileList;
         mPickerParam = pickerParam;
         mSelectedList = new ArrayList<>();
-        mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HHmm", Locale.CHINA);
+        mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
     }
 
     @Override
-    public void onBindViewHolder(FileSelectViewHolder holder, int position) {
+    public void onBindViewHolder(FileSelectViewHolder holder, final int position) {
         //是否是多选
         if (!mPickerParam.isMuiltyMode()) {
             holder.cbChoose.setVisibility(View.GONE);
@@ -51,6 +52,14 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
             holder.cbChoose.setChecked(isSelected(position));
         }
         bindDatas(holder, position);
+        holder.layoutRoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(position);
+                }
+            }
+        });
     }
 
     private boolean isSelected(int position) {
@@ -68,6 +77,9 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
         }
     }
 
+    public File getItem(int position) {
+        return mFileList.get(position);
+    }
 
     private void updateFileDirIcon(ImageView imageView) {
         switch (mPickerParam.getFileIconStyle()) {
@@ -124,6 +136,11 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
         viewHolder.tvDetail.setText(mSimpleDateFormat.format(new Date(file.lastModified())));
     }
 
+    public void onDataChange(List<File> files) {
+        mFileList = files;
+        mSelectedList.clear();
+        notifyDataSetChanged();
+    }
 
     public void setSelectPosition(int position) {
 
@@ -139,9 +156,13 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
         notifyDataSetChanged();
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
+
     @Override
     public int getItemCount() {
-        return mFileList != null ? 0 : mFileList.size();
+        return mFileList == null ? 0 : mFileList.size();
     }
 
     class FileSelectViewHolder extends RecyclerView.ViewHolder {
@@ -153,12 +174,16 @@ public class FileSelectAdapter extends RecyclerView.Adapter<FileSelectAdapter.Fi
 
         public FileSelectViewHolder(View view) {
             super(view);
-            ivType = (ImageView) itemView.findViewById(R.id.iv_type);
-            layoutRoot = (RelativeLayout) itemView.findViewById(R.id.layout_item_root);
-            tvName = (TextView) itemView.findViewById(R.id.tv_file_name);
-            tvDetail = (TextView) itemView.findViewById(R.id.tv_file_detail);
-            cbChoose = (CheckBox) itemView.findViewById(R.id.cb_choose);
+            ivType = itemView.findViewById(R.id.iv_type);
+            layoutRoot = itemView.findViewById(R.id.layout_item_root);
+            tvName = itemView.findViewById(R.id.tv_file_name);
+            tvDetail = itemView.findViewById(R.id.tv_file_detail);
+            cbChoose = itemView.findViewById(R.id.cb_choose);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 
 }

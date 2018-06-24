@@ -3,7 +3,7 @@
     android:id="@+id/rl_no_data"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/toolbar_pick_file"
+    android:layout_below="@+id/layout_path"
     android:background="@color/color_white_transparent">
     <TextView
         android:id="@+id/tv_empty"

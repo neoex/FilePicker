@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void showSelectFile() {
-        new FilePicker().withActivity(this).withTitle("选择文件").start();
+        new FilePicker().withActivity(this).withTitle("选择文件").withTitleColor(getResources().getColor(R.color.color_white)).start();
     }
 
 }

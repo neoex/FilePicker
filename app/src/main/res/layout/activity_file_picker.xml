@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ui.FilePickerActivity">
@@ -10,24 +11,65 @@
         android:id="@+id/toolbar_pick_file"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/color_blue_sea"
+        android:background="@color/color_dark"
         android:minHeight="?android:attr/actionBarSize"
         app:navigationIcon="@mipmap/ic_left_arrow" />
+
+    <LinearLayout
+        android:id="@+id/layout_path"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/toolbar_pick_file"
+        android:background="@color/color_white_transparent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_path"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:ellipsize="middle"
+            android:gravity="left|center"
+            android:singleLine="true"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:drawableLeft="@mipmap/lfile_up"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="返回上级" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_below="@+id/layout_path"
+        android:background="@color/color_divider" />
 
     <include layout="@layout/empty_holder_layout" />
 
     <cn.mugua.com.filepicker.widget.EmptyRecyclerView
+        android:id="@+id/erc_file_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btn_select_conform"
-        android:layout_below="@+id/toolbar_pick_file" />
+        android:layout_below="@+id/layout_path" />
 
     <Button
         android:id="@+id/btn_select_conform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/color_blue_sea"
+        android:background="@color/color_dark"
         android:text="@string/btn_conform"
         android:textColor="@color/color_deepGray" />
 </RelativeLayout>

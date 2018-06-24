@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class BasicThreadFactory implements ThreadFactory {
+ class BasicThreadFactory implements ThreadFactory {
     private AtomicLong mThreadCounter;
     /**
      * 包装工厂

@@ -36,6 +36,10 @@ public class FilePicker {
         return this;
     }
 
+    public FilePicker withPath(String path) {
+        mPickerParam.setRootPath(path);
+        return this;
+    }
 
     /**
      * 文件选择activity 的主题样式

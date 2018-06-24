@@ -15,6 +15,18 @@ public class EmptyRecyclerView extends RecyclerView {
             super.onChanged();
             checkIfEmpty();
         }
+
+        @Override
+        public void onItemRangeInserted(int positionStart, int itemCount) {
+            super.onItemRangeInserted(positionStart, itemCount);
+            checkIfEmpty();
+        }
+
+        @Override
+        public void onItemRangeChanged(int positionStart, int itemCount) {
+            super.onItemRangeChanged(positionStart, itemCount);
+            checkIfEmpty();
+        }
     };
 
     public EmptyRecyclerView(Context context) {
@@ -32,7 +44,8 @@ public class EmptyRecyclerView extends RecyclerView {
 
     private void checkIfEmpty() {
         if (mEmptyView != null && getAdapter() != null) {
-            boolean visiable = getAdapter().getItemCount() == 0;
+            int count = getAdapter().getItemCount();
+            boolean visiable =  (count == 0);
             mEmptyView.setVisibility(visiable ? VISIBLE : GONE);
             setVisibility(visiable ? GONE : VISIBLE);
         }

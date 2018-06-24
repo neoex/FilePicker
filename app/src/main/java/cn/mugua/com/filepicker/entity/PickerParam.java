@@ -25,6 +25,15 @@ public class PickerParam implements Serializable {
 
     private String mConformText;
     private String mNoFileSelectTips;
+    private String mRootPath;
+
+    public String getRootPath() {
+        return mRootPath;
+    }
+
+    public void setRootPath(String rootPath) {
+        mRootPath = rootPath;
+    }
 
     public PickerParam() {
         initDefault();
